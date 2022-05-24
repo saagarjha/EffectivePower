@@ -1,0 +1,242 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49344BD6283D4EC400D6058E /* Polyfills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49344BD5283D4EC400D6058E /* Polyfills.swift */; };
+		4962DAE1283C77B9008240D4 /* SQLiteDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAE0283C77B9008240D4 /* SQLiteDatabase.swift */; };
+		4962DAE3283C7864008240D4 /* BinaryGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAE2283C7864008240D4 /* BinaryGraph.swift */; };
+		4962DAE5283C78AA008240D4 /* HistogramGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAE4283C78AA008240D4 /* HistogramGraph.swift */; };
+		4962DAE7283C78D4008240D4 /* LinearGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAE6283C78D4008240D4 /* LinearGraph.swift */; };
+		4962DAE9283C7965008240D4 /* UsageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAE8283C7965008240D4 /* UsageView.swift */; };
+		4962DAEB283C7973008240D4 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAEA283C7973008240D4 /* ChartView.swift */; };
+		4962DAED283C79A3008240D4 /* MouseTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAEC283C79A3008240D4 /* MouseTrackingView.swift */; };
+		4962DAEF283C7BDB008240D4 /* Graphability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4962DAEE283C7BDB008240D4 /* Graphability.swift */; };
+		4968D4772827F708005A219D /* EffectivePowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D4762827F708005A219D /* EffectivePowerApp.swift */; };
+		4968D4792827F708005A219D /* EffectivePowerDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D4782827F708005A219D /* EffectivePowerDocument.swift */; };
+		4968D47B2827F708005A219D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D47A2827F708005A219D /* ContentView.swift */; };
+		4968D47D2827F709005A219D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4968D47C2827F709005A219D /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		49344BD5283D4EC400D6058E /* Polyfills.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polyfills.swift; sourceTree = "<group>"; };
+		4962DADB283C758F008240D4 /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		4962DADC283C75AE008240D4 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		4962DADD283C75B7008240D4 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		4962DADE283C75C9008240D4 /* EffectivePower.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = EffectivePower.xcconfig; sourceTree = "<group>"; };
+		4962DADF283C7725008240D4 /* Deployment.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Deployment.xcconfig; sourceTree = "<group>"; };
+		4962DAE0283C77B9008240D4 /* SQLiteDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteDatabase.swift; sourceTree = "<group>"; };
+		4962DAE2283C7864008240D4 /* BinaryGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryGraph.swift; sourceTree = "<group>"; };
+		4962DAE4283C78AA008240D4 /* HistogramGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramGraph.swift; sourceTree = "<group>"; };
+		4962DAE6283C78D4008240D4 /* LinearGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearGraph.swift; sourceTree = "<group>"; };
+		4962DAE8283C7965008240D4 /* UsageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageView.swift; sourceTree = "<group>"; };
+		4962DAEA283C7973008240D4 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		4962DAEC283C79A3008240D4 /* MouseTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingView.swift; sourceTree = "<group>"; };
+		4962DAEE283C7BDB008240D4 /* Graphability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphability.swift; sourceTree = "<group>"; };
+		4968D4732827F708005A219D /* EffectivePower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EffectivePower.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4968D4762827F708005A219D /* EffectivePowerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectivePowerApp.swift; sourceTree = "<group>"; };
+		4968D4782827F708005A219D /* EffectivePowerDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectivePowerDocument.swift; sourceTree = "<group>"; };
+		4968D47A2827F708005A219D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4968D47C2827F709005A219D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4968D4812827F709005A219D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4968D4822827F709005A219D /* EffectivePower.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EffectivePower.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4968D4702827F708005A219D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4968D46A2827F708005A219D = {
+			isa = PBXGroup;
+			children = (
+				4968D4742827F708005A219D /* Products */,
+				4968D4752827F708005A219D /* EffectivePower */,
+			);
+			sourceTree = "<group>";
+		};
+		4968D4742827F708005A219D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4968D4732827F708005A219D /* EffectivePower.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4968D4752827F708005A219D /* EffectivePower */ = {
+			isa = PBXGroup;
+			children = (
+				4968D4822827F709005A219D /* EffectivePower.entitlements */,
+				4968D4812827F709005A219D /* Info.plist */,
+				4962DAE2283C7864008240D4 /* BinaryGraph.swift */,
+				4962DAEA283C7973008240D4 /* ChartView.swift */,
+				4968D47A2827F708005A219D /* ContentView.swift */,
+				4968D4762827F708005A219D /* EffectivePowerApp.swift */,
+				4968D4782827F708005A219D /* EffectivePowerDocument.swift */,
+				4962DAEE283C7BDB008240D4 /* Graphability.swift */,
+				4962DAE4283C78AA008240D4 /* HistogramGraph.swift */,
+				4962DAE6283C78D4008240D4 /* LinearGraph.swift */,
+				4962DAEC283C79A3008240D4 /* MouseTrackingView.swift */,
+				49344BD5283D4EC400D6058E /* Polyfills.swift */,
+				4962DAE0283C77B9008240D4 /* SQLiteDatabase.swift */,
+				4962DAE8283C7965008240D4 /* UsageView.swift */,
+				4968D47C2827F709005A219D /* Assets.xcassets */,
+				4962DADC283C75AE008240D4 /* Debug.xcconfig */,
+				4962DADF283C7725008240D4 /* Deployment.xcconfig */,
+				4962DADE283C75C9008240D4 /* EffectivePower.xcconfig */,
+				4962DADD283C75B7008240D4 /* Release.xcconfig */,
+				4962DADB283C758F008240D4 /* Shared.xcconfig */,
+			);
+			path = EffectivePower;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4968D4722827F708005A219D /* EffectivePower */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4968D4852827F709005A219D /* Build configuration list for PBXNativeTarget "EffectivePower" */;
+			buildPhases = (
+				4968D46F2827F708005A219D /* Sources */,
+				4968D4702827F708005A219D /* Frameworks */,
+				4968D4712827F708005A219D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EffectivePower;
+			productName = EffectivePower;
+			productReference = 4968D4732827F708005A219D /* EffectivePower.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4968D46B2827F708005A219D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					4968D4722827F708005A219D = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 4968D46E2827F708005A219D /* Build configuration list for PBXProject "EffectivePower" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4968D46A2827F708005A219D;
+			productRefGroup = 4968D4742827F708005A219D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4968D4722827F708005A219D /* EffectivePower */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4968D4712827F708005A219D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4968D47D2827F709005A219D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4968D46F2827F708005A219D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4968D4792827F708005A219D /* EffectivePowerDocument.swift in Sources */,
+				4962DAEF283C7BDB008240D4 /* Graphability.swift in Sources */,
+				4962DAED283C79A3008240D4 /* MouseTrackingView.swift in Sources */,
+				4962DAE7283C78D4008240D4 /* LinearGraph.swift in Sources */,
+				49344BD6283D4EC400D6058E /* Polyfills.swift in Sources */,
+				4962DAE9283C7965008240D4 /* UsageView.swift in Sources */,
+				4962DAE5283C78AA008240D4 /* HistogramGraph.swift in Sources */,
+				4962DAE3283C7864008240D4 /* BinaryGraph.swift in Sources */,
+				4962DAEB283C7973008240D4 /* ChartView.swift in Sources */,
+				4968D4772827F708005A219D /* EffectivePowerApp.swift in Sources */,
+				4962DAE1283C77B9008240D4 /* SQLiteDatabase.swift in Sources */,
+				4968D47B2827F708005A219D /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4968D4832827F709005A219D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4962DADC283C75AE008240D4 /* Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		4968D4842827F709005A219D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4962DADD283C75B7008240D4 /* Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		4968D4862827F709005A219D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4962DADE283C75C9008240D4 /* EffectivePower.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		4968D4872827F709005A219D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4962DADE283C75C9008240D4 /* EffectivePower.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4968D46E2827F708005A219D /* Build configuration list for PBXProject "EffectivePower" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4968D4832827F709005A219D /* Debug */,
+				4968D4842827F709005A219D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4968D4852827F709005A219D /* Build configuration list for PBXNativeTarget "EffectivePower" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4968D4862827F709005A219D /* Debug */,
+				4968D4872827F709005A219D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4968D46B2827F708005A219D /* Project object */;
+}
