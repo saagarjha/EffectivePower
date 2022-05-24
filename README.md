@@ -1,0 +1,2 @@
+# EffectivePower
+Apple PLSQL viewer
