@@ -17,17 +17,23 @@ struct ContentView: View {
 	var selectedRange: ClosedRange<TimeInterval>? = nil
 	@State
 	var selectedNodes: Set<Node.ID> = []
-
+    
+    @State
+    var specificApp: String
+    
 	var body: some View {
 		let splitView = HSplitView {
 			ChartView(document: document, magnification: $magnification, selectedRange: $selectedRange)
-			UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes)
+            UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes, specificApp: specificApp)
 				.listStyle(.sidebar)
-				.frame(minWidth: 300, idealWidth: 300, maxWidth: 300)
+				.frame(minWidth: 500, idealWidth: 500, maxWidth: 500)
 		}
 		.toolbar {
 			Spacer()
-			Slider(value: $magnification, in: 1...20)
+            HStack {
+                TextField("app", text: $specificApp)
+            }
+            Slider(value: $magnification, in: 0.2...20)
 				.frame(width: 100)
 		}
 

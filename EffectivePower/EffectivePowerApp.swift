@@ -11,7 +11,7 @@ import SwiftUI
 struct EffectivePowerApp: App {
 	var body: some Scene {
 		DocumentGroup(newDocument: EffectivePowerDocument()) { file in
-			ContentView(document: file.$document)
+            ContentView(document: file.$document, specificApp: "")
 		}
 	}
 }
