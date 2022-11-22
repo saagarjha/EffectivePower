@@ -13,7 +13,13 @@ struct UsageView: View {
 	var selectedRange: ClosedRange<TimeInterval>?
 	@Binding
 	var selectedNodes: Set<Node.ID>
-
+    
+    @State
+    var showsAlert = false
+    
+    @State
+    var copiedContent = ""
+    
     var specificApp: String
     var specificRootNode: String
 
@@ -76,8 +82,26 @@ struct UsageView: View {
 							VStack(alignment: .leading) {
 								Text("\(node.node?.name ?? "<Unknown>")")
 									.font(Font.title3)
+                                    .onTapGesture {
+                                        let pasteBoard = NSPasteboard.general
+                                        pasteBoard.clearContents()
+                                        pasteBoard.setString(node.node?.name ?? "", forType: .string)
+                                        copiedContent = node.node?.name ?? ""
+                                        self.showsAlert = true
+                                    }.alert(isPresented: self.$showsAlert) {
+                                        Alert(title: Text("\(copiedContent) copied"))
+                                    }
 								Text("\(node.rootNode?.name ?? "<Unknown>")")
 									.foregroundColor(.secondary)
+                                    .onTapGesture {
+                                        let pasteBoard = NSPasteboard.general
+                                        pasteBoard.clearContents()
+                                        pasteBoard.setString(node.rootNode?.name ?? "", forType: .string)
+                                        copiedContent = node.rootNode?.name ?? ""
+                                        self.showsAlert = true
+                                    }.alert(isPresented: self.$showsAlert) {
+                                        Alert(title: Text("\(copiedContent) copied"))
+                                    }
 							}
 							Spacer()
 							Text(String(format: "%.02f%%", nodes[node]! / totalEnergy * 100))
