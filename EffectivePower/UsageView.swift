@@ -44,15 +44,11 @@ struct UsageView: View {
 		let matchingEvents = events.filter { event in
 			let start = max(event.timestamp.lowerBound.timeIntervalSince1970, selectedRange.lowerBound)
 			let end = min(event.timestamp.upperBound.timeIntervalSince1970, selectedRange.upperBound)
-            var res = start < end
-            if specificApp != "" {
-                res = res && event.node?.name == specificApp
-            }
-            if specificRootNode != "" {
-                res = res && event.rootNode?.name == specificRootNode
-            }
-            
-            return res
+            let conditionTime = start < end
+            let conditionApp = specificApp == "" ? true : event.node?.name == specificApp
+            let conditionRootNode = specificRootNode == "" ? true : event.rootNode?.name == specificRootNode
+        
+            return conditionTime && conditionApp && conditionRootNode
 		}
 
 		let nodes = Dictionary(
@@ -66,7 +62,7 @@ struct UsageView: View {
 		}
 
 		let totalEnergy = nodes.values.reduce(0, +)
-
+        let pasteBoard = NSPasteboard.general
 		let sortedNodes = nodes.sorted {
 			$0.value > $1.value
 		}.map(\.key)
@@ -83,7 +79,6 @@ struct UsageView: View {
 								Text("\(node.node?.name ?? "<Unknown>")")
 									.font(Font.title3)
                                     .onTapGesture {
-                                        let pasteBoard = NSPasteboard.general
                                         pasteBoard.clearContents()
                                         pasteBoard.setString(node.node?.name ?? "", forType: .string)
                                         copiedContent = node.node?.name ?? ""
@@ -94,7 +89,6 @@ struct UsageView: View {
 								Text("\(node.rootNode?.name ?? "<Unknown>")")
 									.foregroundColor(.secondary)
                                     .onTapGesture {
-                                        let pasteBoard = NSPasteboard.general
                                         pasteBoard.clearContents()
                                         pasteBoard.setString(node.rootNode?.name ?? "", forType: .string)
                                         copiedContent = node.rootNode?.name ?? ""
