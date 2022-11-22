@@ -14,6 +14,8 @@ struct UsageView: View {
 	@Binding
 	var selectedNodes: Set<Node.ID>
 
+    var specificApp: String
+
 	static let dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateStyle = .none
@@ -35,7 +37,7 @@ struct UsageView: View {
 		let matchingEvents = events.filter { event in
 			let start = max(event.timestamp.lowerBound.timeIntervalSince1970, selectedRange.lowerBound)
 			let end = min(event.timestamp.upperBound.timeIntervalSince1970, selectedRange.upperBound)
-			return start < end
+            return specificApp == "" ? start < end : start < end && event.node?.name == specificApp
 		}
 
 		let nodes = Dictionary(
