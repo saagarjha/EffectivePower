@@ -21,17 +21,21 @@ struct ContentView: View {
     @State
     var specificApp: String
     
+    @State
+    var specificRootNode: String
+    
 	var body: some View {
 		let splitView = HSplitView {
 			ChartView(document: document, magnification: $magnification, selectedRange: $selectedRange)
-            UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes, specificApp: specificApp)
+            UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes, specificApp: specificApp, specificRootNode: specificRootNode)
 				.listStyle(.sidebar)
 				.frame(minWidth: 500, idealWidth: 500, maxWidth: 500)
 		}
 		.toolbar {
 			Spacer()
             HStack {
-                TextField("app", text: $specificApp)
+                TextField("filter app", text: $specificApp)
+                TextField("filter category", text: $specificRootNode)
             }
             Slider(value: $magnification, in: 0.2...20)
 				.frame(width: 100)
