@@ -19,25 +19,29 @@ struct ContentView: View {
 	var selectedNodes: Set<Node.ID> = []
 
 	var body: some View {
-		let splitView = HSplitView {
-			ChartView(document: document, magnification: $magnification, selectedRange: $selectedRange)
-			UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes)
-				.listStyle(.sidebar)
-				.frame(minWidth: 300, idealWidth: 300, maxWidth: 300)
-		}
-		.toolbar {
-			Spacer()
-			Slider(value: $magnification, in: 1...20)
-				.frame(width: 100)
+		let chartView = ChartView(document: document, magnification: $magnification, selectedRange: $selectedRange)
+		let usageView = UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes)
+			.frame(minWidth: 300, idealWidth: 300, maxWidth: 300)
+		let contentView = Group {
+			if #available(macOS 14.0, *) {
+				chartView.inspector(isPresented: .constant(true)) {
+					usageView
+				}
+			} else {
+				HStack {
+					chartView
+					usageView
+				}
+			}
 		}
 
 		// View builders make this really annoying
 		if let deviceModel = document.deviceModel,
 			let deviceBuild = document.deviceBuild
 		{
-			splitView.navigationSubtitle("\(document.deviceName ?? "<Unknown>") (\(deviceModel), \(deviceBuild))")
+			contentView.navigationSubtitle("\(document.deviceName ?? "<Unknown>") (\(deviceModel), \(deviceBuild))")
 		} else {
-			splitView.navigationSubtitle("\(document.batteryStatuses.count + document.events.count) samples")
+			contentView.navigationSubtitle("\(document.batteryStatuses.count + document.events.count) samples")
 		}
 	}
 }

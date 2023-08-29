@@ -7,28 +7,54 @@
 
 import SwiftUI
 
+struct NodePresentation: Hashable, Identifiable {
+	let node: Node?
+	let rootNode: Node?
+
+	var id: String {
+		(node?.id ?? "") + " " + (rootNode?.id ?? "")
+	}
+}
+
+struct NodeView: View {
+	let node: NodePresentation
+	let energy: Double
+	let totalEnergy: Double
+
+	var body: some View {
+		HStack {
+			VStack(alignment: .leading) {
+				Text("\(node.node?.name ?? "<Unknown>")")
+					.font(Font.title3)
+				Text("\(node.rootNode?.name ?? "<Unknown>")")
+					.foregroundColor(.secondary)
+			}
+			Spacer()
+			Text(String(format: "%.02f%%", energy / totalEnergy * 100))
+				.font(.title2)
+		}
+	}
+}
+
 struct UsageView: View {
 	let events: [Event]
 	@Binding
 	var selectedRange: ClosedRange<TimeInterval>?
 	@Binding
 	var selectedNodes: Set<Node.ID>
+	@State
+	var filter: String = ""
 
 	static let dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateStyle = .none
+		if #available(macOS 14.0, *) {
+			dateFormatter.dateStyle = .short
+		} else {
+			dateFormatter.dateStyle = .none
+		}
 		dateFormatter.timeStyle = .medium
 		return dateFormatter
 	}()
-
-	struct NodePresentation: Hashable, Identifiable {
-		let node: Node?
-		let rootNode: Node?
-
-		var id: String {
-			(node?.id ?? "") + " " + (rootNode?.id ?? "")
-		}
-	}
 
 	var body: some View {
 		let selectedRange = selectedRange ?? Date.distantPast.timeIntervalSince1970...Date.distantFuture.timeIntervalSince1970
@@ -52,43 +78,70 @@ struct UsageView: View {
 
 		let sortedNodes = nodes.sorted {
 			$0.value > $1.value
-		}.map(\.key)
+		}
+		.map(\.key)
+		.filter {
+			return filter.isEmpty || ($0.node?.name.localizedCaseInsensitiveContains(filter) ?? false) || ($0.rootNode?.name.localizedCaseInsensitiveContains(filter) ?? false)
+		}
 
-		// Seems broken, so comment it out for now.
-		//		Table(sortedNodes, selection: $selectedNodes) {
-		//			TableColumn("") { node in
-		List {
-			Section(
-				content: {
-					ForEach(sortedNodes) { node in
-						HStack {
-							VStack(alignment: .leading) {
-								Text("\(node.node?.name ?? "<Unknown>")")
-									.font(Font.title3)
-								Text("\(node.rootNode?.name ?? "<Unknown>")")
-									.foregroundColor(.secondary)
-							}
-							Spacer()
-							Text(String(format: "%.02f%%", nodes[node]! / totalEnergy * 100))
-								.font(.title2)
-						}
-					}
-				},
-				header: {
-					HStack(spacing: 0) {
-						Image(systemName: "clock")
-						Text("\(Date(timeIntervalSince1970: selectedRange.lowerBound), formatter: Self.dateFormatter) - \(Date(timeIntervalSince1970: selectedRange.upperBound), formatter: Self.dateFormatter)")
-							.font(.body.monospacedDigit())
-						Spacer()
-						Image(systemName: "sum")
-						Text(String(format: "%.02f Wh", totalEnergy / 1_000_000))
-							.font(.body.monospacedDigit())
-						Spacer()
+		if #available(macOS 14.0, *) {
+			VStack(alignment: .leading, spacing: 0) {
+				Table(sortedNodes, selection: $selectedNodes) {
+					TableColumn("\(Self.dateFormatter.string(from: Date(timeIntervalSince1970: selectedRange.lowerBound))) - \(Self.dateFormatter.string(from: Date(timeIntervalSince1970: selectedRange.upperBound)))") { node in
+						NodeView(node: node, energy: nodes[node]!, totalEnergy: totalEnergy)
+							.padding([.leading, .trailing])
 					}
 				}
-			)
-			.collapsible(false)
+				.searchable(text: $filter)
+				.toolbar {
+					Spacer()
+				}
+				HStack(spacing: 0) {
+					Group {
+						Text(String(format: "%.02f Wh", totalEnergy / 1_000_000))
+							.padding([.leading], 20)
+						if !selectedNodes.isEmpty {
+							let visibleIDs = Set(sortedNodes.map(\.id))
+							let selection = nodes.filter {
+								selectedNodes.contains($0.key.id) && visibleIDs.contains($0.key.id)
+							}
+							let selectedEnergy = selection.values.reduce(0, +)
+							Text(String(format: "(%.02f Wh, %.02f%%)", selectedEnergy / 1_000_000, selectedEnergy / totalEnergy * 100))
+						}
+					}
+					.font(.body.monospacedDigit())
+					.padding(4)
+				}
+			}
+		} else {
+			let list = List {
+				Section(
+					content: {
+						ForEach(sortedNodes) { node in
+							NodeView(node: node, energy: nodes[node]!, totalEnergy: totalEnergy)
+						}
+					},
+					header: {
+						HStack(spacing: 0) {
+							Image(systemName: "clock")
+							Text("\(Date(timeIntervalSince1970: selectedRange.lowerBound), formatter: Self.dateFormatter) - \(Date(timeIntervalSince1970: selectedRange.upperBound), formatter: Self.dateFormatter)")
+								.font(.body.monospacedDigit())
+							Spacer()
+							Image(systemName: "sum")
+							Text(String(format: "%.02f Wh", totalEnergy / 1_000_000))
+								.font(.body.monospacedDigit())
+							Spacer()
+						}
+					}
+				)
+				.collapsible(false)
+			}
+			.listStyle(.sidebar)
+			if #available(macOS 12.0, *) {
+				list.searchable(text: $filter)
+			} else {
+				list
+			}
 		}
-		//		}
 	}
 }
