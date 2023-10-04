@@ -16,10 +16,10 @@ struct ContentView: View {
 	@State
 	var selectedRange: ClosedRange<TimeInterval>? = nil
 	@State
-	var selectedNodes: Set<Node.ID> = []
+	var selectedNodes: Set<CompleteNode.ID> = []
 
 	var body: some View {
-		let chartView = ChartView(document: document, magnification: $magnification, selectedRange: $selectedRange)
+		let chartView = ChartView(document: document, magnification: $magnification, selectedRange: $selectedRange, selectedNodes: $selectedNodes)
 		let usageView = UsageView(events: document.events, selectedRange: $selectedRange, selectedNodes: $selectedNodes)
 			.frame(minWidth: 300, idealWidth: 300, maxWidth: 300)
 		let contentView = Group {
@@ -28,7 +28,7 @@ struct ContentView: View {
 					usageView
 				}
 			} else {
-				HStack {
+				HStack(spacing: 0) {
 					chartView
 					usageView
 				}

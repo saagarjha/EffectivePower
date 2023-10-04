@@ -16,6 +16,8 @@ struct ChartView: View {
 	var partialMagnification: CGFloat = 1
 	@Binding
 	var selectedRange: ClosedRange<TimeInterval>?
+	@Binding
+	var selectedNodes: Set<CompleteNode.ID>
 	@State
 	var location: CGPoint?
 
@@ -35,7 +37,12 @@ struct ChartView: View {
 					ZStack {
 						// Hide when in a gesture, because drawing this is slow
 						if partialMagnification == 1 {
-							HistogramGraphView(horizontalBounds: bounds, values: document.events, color: Color(hue: 0.53, saturation: 1, brightness: 1), identityToken: document)
+							let selectedEvents =
+								!selectedNodes.isEmpty
+								? document.events.filter {
+									selectedNodes.contains($0.completeNode.id)
+								} : nil
+							HistogramGraphView(horizontalBounds: bounds, values: document.events, filteredValues: selectedEvents, color: .graph, filterColor: .filteredGraph, identityToken: selectedNodes)
 								.equatable()
 								.frame(width: width)
 						}
@@ -141,6 +148,7 @@ struct ChartView: View {
 				}
 			}
 		}
+		.background(Color.backgroundish)
 	}
 
 	func normalizePartialMagnification(_ partialMagnification: CGFloat) -> CGFloat {

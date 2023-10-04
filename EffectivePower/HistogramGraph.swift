@@ -25,38 +25,54 @@ struct HistogramGraphView<T: Identifiable & HistogramGraphable, I: Equatable>: V
 
 	let horizontalBounds: ClosedRange<Double>
 	let values: [T]
+	let filteredValues: [T]?
 	let color: Color
+	let filterColor: Color
 	let identityToken: I
 
 	var body: some View {
 		GeometryReader { geometry in
-			Path { path in
-				let histogram = smoothHistogram(divisions: Int(geometry.size.width) / 250 * 10)
-				guard let max = histogram.map(\.value).max() else {
-					return
+			let divisions = Int(geometry.size.width) / 250 * 10
+			let histogram = smoothHistogram(values: values, divisions: divisions)
+			let max = histogram.map(\.value).max()
+
+			ZStack {
+				path(for: histogram, in: geometry, max: max)
+					.fill(color)
+				if let filteredValues = filteredValues {
+					let filteredHistogram = smoothHistogram(values: filteredValues, divisions: divisions)
+					path(for: filteredHistogram, in: geometry, max: max)
+						.fill(filterColor)
 				}
-				let verticalBounds = 0...max
-
-				path.move(to: .init(x: 0, y: geometry.size.height))
-				for histogramSubgraph in histogram {
-					let width = (histogramSubgraph.range.upperBound - histogramSubgraph.range.lowerBound) / (horizontalBounds.upperBound - horizontalBounds.lowerBound) * geometry.size.width
-					let offset = (histogramSubgraph.range.lowerBound - horizontalBounds.lowerBound) / (horizontalBounds.upperBound - horizontalBounds.lowerBound) * geometry.size.width
-					let height = (verticalBounds.upperBound - histogramSubgraph.value) / (verticalBounds.upperBound - verticalBounds.lowerBound) * geometry.size.height
-
-					path.addLine(to: .init(x: offset, y: geometry.size.height))
-					path.addLine(to: .init(x: offset, y: height))
-					path.addLine(to: .init(x: offset + width, y: height))
-					path.addLine(to: .init(x: offset + width, y: geometry.size.height))
-
-				}
-				path.move(to: .init(x: geometry.size.width, y: geometry.size.height))
-				path.closeSubpath()
 			}
-			.fill(color)
 		}
 	}
 
-	func histogram() -> [HistogramSubgraph] {
+	func path(for histogram: [HistogramSubgraph], in geometry: GeometryProxy, max: Double?) -> Path {
+		Path { path in
+			guard let max = max else {
+				return
+			}
+			let verticalBounds = 0...max
+
+			path.move(to: .init(x: 0, y: geometry.size.height))
+			for histogramSubgraph in histogram {
+				let width = (histogramSubgraph.range.upperBound - histogramSubgraph.range.lowerBound) / (horizontalBounds.upperBound - horizontalBounds.lowerBound) * geometry.size.width
+				let offset = (histogramSubgraph.range.lowerBound - horizontalBounds.lowerBound) / (horizontalBounds.upperBound - horizontalBounds.lowerBound) * geometry.size.width
+				let height = (verticalBounds.upperBound - histogramSubgraph.value) / (verticalBounds.upperBound - verticalBounds.lowerBound) * geometry.size.height
+
+				path.addLine(to: .init(x: offset, y: geometry.size.height))
+				path.addLine(to: .init(x: offset, y: height))
+				path.addLine(to: .init(x: offset + width, y: height))
+				path.addLine(to: .init(x: offset + width, y: geometry.size.height))
+
+			}
+			path.move(to: .init(x: geometry.size.width, y: geometry.size.height))
+			path.closeSubpath()
+		}
+	}
+
+	func histogram(values: [T]) -> [HistogramSubgraph] {
 		var controlPoints = [Double: ([T], [T])]()
 
 		for value in values {
@@ -84,8 +100,8 @@ struct HistogramGraphView<T: Identifiable & HistogramGraphable, I: Equatable>: V
 		return histogram
 	}
 
-	func smoothHistogram(divisions: Int) -> [HistogramSubgraph] {
-		let histogram = histogram()
+	func smoothHistogram(values: [T], divisions: Int) -> [HistogramSubgraph] {
+		let histogram = histogram(values: values)
 		var smoothHistogram = [HistogramSubgraph]()
 
 		var index = histogram.startIndex

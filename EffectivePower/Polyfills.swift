@@ -37,6 +37,22 @@ extension Color {
 			}
 		}
 	}
+	
+	static var graph: Self {
+		if #available(macOS 12.0, *) {
+			return Color(nsColor: .selectedTextBackgroundColor)
+		} else {
+			return Color(hue: 0.53, saturation: 1, brightness: 1)
+		}
+	}
+	
+	static var filteredGraph: Self {
+		if #available(macOS 12.0, *) {
+			return Color(nsColor: .selectedContentBackgroundColor)
+		} else {
+			return Color(hue: 0.53, saturation: 1, brightness: 0.5)
+		}
+	}
 }
 
 extension View {

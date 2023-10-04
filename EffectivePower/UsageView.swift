@@ -7,17 +7,8 @@
 
 import SwiftUI
 
-struct NodePresentation: Hashable, Identifiable {
-	let node: Node?
-	let rootNode: Node?
-
-	var id: String {
-		(node?.id ?? "") + " " + (rootNode?.id ?? "")
-	}
-}
-
 struct NodeView: View {
-	let node: NodePresentation
+	let node: CompleteNode
 	let energy: Double
 	let totalEnergy: Double
 
@@ -41,7 +32,7 @@ struct UsageView: View {
 	@Binding
 	var selectedRange: ClosedRange<TimeInterval>?
 	@Binding
-	var selectedNodes: Set<Node.ID>
+	var selectedNodes: Set<CompleteNode.ID>
 	@State
 	var filter: String = ""
 
@@ -69,7 +60,7 @@ struct UsageView: View {
 				return ($0.node, $0.rootNode, Double($0.energy))
 			}
 		) { (node, rootNode, energy: Double) in
-			NodePresentation(node: node, rootNode: rootNode)
+			CompleteNode(node: node, rootNode: rootNode)
 		}.mapValues {
 			$0.map(\.2).reduce(0, +)
 		}
@@ -77,6 +68,8 @@ struct UsageView: View {
 		let totalEnergy = nodes.values.reduce(0, +)
 
 		let sortedNodes = nodes.sorted {
+			$0.key.id > $1.key.id
+		}.sorted {
 			$0.value > $1.value
 		}
 		.map(\.key)
@@ -85,17 +78,16 @@ struct UsageView: View {
 		}
 
 		if #available(macOS 14.0, *) {
-			VStack(alignment: .leading, spacing: 0) {
-				Table(sortedNodes, selection: $selectedNodes) {
-					TableColumn("\(Self.dateFormatter.string(from: Date(timeIntervalSince1970: selectedRange.lowerBound))) - \(Self.dateFormatter.string(from: Date(timeIntervalSince1970: selectedRange.upperBound)))") { node in
-						NodeView(node: node, energy: nodes[node]!, totalEnergy: totalEnergy)
-							.padding([.leading, .trailing])
-					}
+			Table(sortedNodes, selection: $selectedNodes) {
+				TableColumn("\(Self.dateFormatter.string(from: Date(timeIntervalSince1970: selectedRange.lowerBound))) - \(Self.dateFormatter.string(from: Date(timeIntervalSince1970: selectedRange.upperBound)))") { node in
+					NodeView(node: node, energy: nodes[node]!, totalEnergy: totalEnergy)
+						.padding([.leading, .trailing])
 				}
-				.searchable(text: $filter)
-				.toolbar {
-					Spacer()
-				}
+			}
+			.searchable(text: $filter)
+			.alternatingRowBackgrounds(.disabled)
+			.scrollContentBackground(.hidden)
+			.safeAreaInset(edge: .bottom, spacing: 0) {
 				HStack(spacing: 0) {
 					Group {
 						Text(String(format: "%.02f Wh", totalEnergy / 1_000_000))
@@ -111,7 +103,12 @@ struct UsageView: View {
 					}
 					.font(.body.monospacedDigit())
 					.padding(4)
+					Spacer()
 				}
+				.background(Material.bar)
+			}
+			.toolbar {
+				Spacer()
 			}
 		} else {
 			let list = List {

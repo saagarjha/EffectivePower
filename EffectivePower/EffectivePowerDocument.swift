@@ -20,6 +20,15 @@ struct Node: Hashable, Identifiable {
 	}
 }
 
+struct CompleteNode: Hashable, Identifiable {
+	let node: Node?
+	let rootNode: Node?
+
+	var id: String {
+		(node?.id ?? "") + " " + (rootNode?.id ?? "")
+	}
+}
+
 class Event: Identifiable {
 	let node: Node?
 	let rootNode: Node?
@@ -28,6 +37,10 @@ class Event: Identifiable {
 	var energy: Int
 
 	var children = [Event]()
+	
+	var completeNode: CompleteNode {
+		CompleteNode(node: node, rootNode: rootNode)
+	}
 
 	init(node: Node?, rootNode: Node?, parent: Event?, timestamp: ClosedRange<Date>, energy: Int) {
 		self.node = node
