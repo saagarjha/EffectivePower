@@ -148,7 +148,11 @@ class EffectivePowerDocument: FileDocument, Equatable {
 				continue
 			}
 			let parent = events[Int(row[3])!]
-			let event = Event(node: nodes[Int(row[1])!], rootNode: nodes[Int(row[2])!], parent: parent, timestamp: start...end, energy: Int(row[7])! + Int(row[8])!)
+			let energy = Int(row[7])! + Int(row[8])!
+			guard energy > 0 else {
+				continue
+			}
+			let event = Event(node: nodes[Int(row[1])!], rootNode: nodes[Int(row[2])!], parent: parent, timestamp: start...end, energy: energy)
 			parent?.children.append(event)
 			events[Int(row[0])!] = event
 		}
