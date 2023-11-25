@@ -124,12 +124,17 @@ struct ChartView: View {
 							let closestBatteryStatus = document.batteryStatuses.min {
 								abs($0.timestamp.timeIntervalSince1970 - time) < abs($1.timestamp.timeIntervalSince1970 - time)
 							}!
+							let earlierUnlock = document.unlockedIntervals.lowerBound(of: time, transform: \.duration.lowerBound.timeIntervalSince1970)
+							let laterUnlock = document.unlockedIntervals.upperBound(of: time, transform: \.duration.upperBound.timeIntervalSince1970)
+
 							HStack {
 								HStack {
 									Image(systemName: "clock.fill")
 									Text("\(Date(timeIntervalSince1970: time), formatter: Self.overlayFormatter)")
 										.font(.title3.monospacedDigit())
 								}
+								Divider()
+								Image(systemName: earlierUnlock != laterUnlock ? "lock.open.fill" : "lock.fill")
 								Divider()
 								HStack {
 									Image(systemName: closestBatteryStatus.charging ? "battery.100.bolt" : "battery.100")

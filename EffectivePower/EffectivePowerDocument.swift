@@ -37,7 +37,7 @@ class Event: Identifiable {
 	var energy: Int
 
 	var children = [Event]()
-	
+
 	var completeNode: CompleteNode {
 		CompleteNode(node: node, rootNode: rootNode)
 	}
@@ -71,12 +71,21 @@ class BatteryStatus: Hashable, Identifiable {
 	}
 }
 
+class UnlockedInterval: Identifiable {
+	let duration: ClosedRange<Date>
+
+	init(duration: ClosedRange<Date>) {
+		self.duration = duration
+	}
+}
+
 class EffectivePowerDocument: FileDocument, Equatable {
 	static var readableContentTypes: [UTType] { [.plsql] }
 
 	let nodes: [Int: Node]
 	let events: [Event]
 	let batteryStatuses: [BatteryStatus]
+	let unlockedIntervals: [UnlockedInterval]
 
 	let bounds: ClosedRange<Date>
 
@@ -92,6 +101,7 @@ class EffectivePowerDocument: FileDocument, Equatable {
 		deviceModel = ""
 		deviceBuild = ""
 		bounds = Date()...(Date())
+		unlockedIntervals = []
 	}
 
 	required init(configuration: ReadConfiguration) throws {
@@ -104,7 +114,7 @@ class EffectivePowerDocument: FileDocument, Equatable {
 			nodes[Int(row[0])!] = Node(name: row[1])
 		}
 		self.nodes = nodes
-		
+
 		var offsets = [(Double, Double)]()
 		for row in try database.execute(statement: "SELECT timestamp, system FROM PLStorageOperator_EventForward_TimeOffset") {
 			let row = row.map {
@@ -117,11 +127,14 @@ class EffectivePowerDocument: FileDocument, Equatable {
 		offsets.sort {
 			$0.0 < $1.0
 		}
-		
+
 		func offset(for timestamp: Double) -> Double {
-			offsets[offsets.index(offsets.firstIndex {
-				$0.0 > timestamp
-			} ?? offsets.endIndex, offsetBy: -1, limitedBy: offsets.startIndex) ?? offsets.startIndex].1
+			offsets[
+				offsets.index(
+					offsets.firstIndex {
+						$0.0 > timestamp
+					} ?? offsets.endIndex, offsetBy: -1, limitedBy: offsets.startIndex) ?? offsets.startIndex
+			].1
 		}
 
 		var events = [Int: Event]()
@@ -138,7 +151,8 @@ class EffectivePowerDocument: FileDocument, Equatable {
 			// Ignore these, as per Apple's response to FB11722856:
 			// These are the “dummy’ power events…created with a startDate of NSDate distantPast
 			guard abs(_start.timeIntervalSince(.distantPast)) >= 1,
-				  abs(_end.timeIntervalSince(.distantPast)) >= 1 else {
+				abs(_end.timeIntervalSince(.distantPast)) >= 1
+			else {
 				print("Ignoring dummy events: ", _start, _end)
 				continue
 			}
@@ -179,6 +193,27 @@ class EffectivePowerDocument: FileDocument, Equatable {
 		self.batteryStatuses = batteryStatus.sorted {
 			$0.timestamp < $1.timestamp
 		}
+
+		var unlockedIntervals = [UnlockedInterval]()
+		var unlockStart = Date.distantPast
+		for row in try database.execute(statement: "SELECT timestamp, Locked FROM 'PLSpringBoardAgent_EventForward_SBLock'") {
+			let row = row.map {
+				$0!
+			}
+			let timestamp = Double(row[0])!
+			let offset = offset(for: timestamp)
+			let time = Date(timeIntervalSince1970: timestamp + offset)
+			if Int(row[1])! == 1 {  // Locked
+				unlockedIntervals.append(UnlockedInterval(duration: unlockStart...time))
+			} else if Int(row[1])! == 0 {
+				unlockStart = time
+			}
+		}
+
+		if unlockedIntervals.last?.duration.lowerBound != unlockStart {
+			unlockedIntervals.append(UnlockedInterval(duration: unlockStart...(.distantFuture)))
+		}
+		self.unlockedIntervals = unlockedIntervals
 
 		let configuration = try database.execute(statement: "SELECT timestamp, DeviceName, Device, Build FROM 'PLConfigAgent_EventNone_Config' ORDER BY timestamp")
 		deviceName =

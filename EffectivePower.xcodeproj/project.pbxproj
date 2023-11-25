@@ -20,6 +20,7 @@
 		4968D4792827F708005A219D /* EffectivePowerDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D4782827F708005A219D /* EffectivePowerDocument.swift */; };
 		4968D47B2827F708005A219D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D47A2827F708005A219D /* ContentView.swift */; };
 		4968D47D2827F709005A219D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4968D47C2827F709005A219D /* Assets.xcassets */; };
+		499504942B1050C60046A141 /* BinarySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499504932B1050C60046A141 /* BinarySearch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		4968D47C2827F709005A219D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4968D4812827F709005A219D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4968D4822827F709005A219D /* EffectivePower.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EffectivePower.entitlements; sourceTree = "<group>"; };
+		499504932B1050C60046A141 /* BinarySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinarySearch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				4968D4822827F709005A219D /* EffectivePower.entitlements */,
 				4968D4812827F709005A219D /* Info.plist */,
 				4962DAE2283C7864008240D4 /* BinaryGraph.swift */,
+				499504932B1050C60046A141 /* BinarySearch.swift */,
 				4962DAEA283C7973008240D4 /* ChartView.swift */,
 				4968D47A2827F708005A219D /* ContentView.swift */,
 				4968D4762827F708005A219D /* EffectivePowerApp.swift */,
@@ -170,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4968D4792827F708005A219D /* EffectivePowerDocument.swift in Sources */,
+				499504942B1050C60046A141 /* BinarySearch.swift in Sources */,
 				4962DAEF283C7BDB008240D4 /* Graphability.swift in Sources */,
 				4962DAED283C79A3008240D4 /* MouseTrackingView.swift in Sources */,
 				4962DAE7283C78D4008240D4 /* LinearGraph.swift in Sources */,
